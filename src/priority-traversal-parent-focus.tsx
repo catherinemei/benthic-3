@@ -151,6 +151,7 @@ export function TraversalOutputComponentKeyboardParentFocus(
             }
           }
         } else if (historyList.length > 2) {
+          console.log("hitting this one");
           // At any other node - might take alternate path up and need to calculate default path
 
           const curNodeId = historyList.pop();
@@ -178,6 +179,7 @@ export function TraversalOutputComponentKeyboardParentFocus(
             parentNodeElement.focus();
           }
         } else {
+          console.log("hitting this 2");
           // At root node - only 1 node in history and cannot select/go-up
           const parentSection = document.getElementById(`parents-group`);
           parentSection?.focus();
@@ -190,14 +192,22 @@ export function TraversalOutputComponentKeyboardParentFocus(
         const oldParentNode = historyList.pop();
         const parentNodeId = focusedElementId.split("-")[3];
         const grandParentNodeId = historyList[historyList.length - 1];
+        console.log("information", {
+          curNodeId: props.nodeGraph[curNodeId!].displayName,
+          oldParentNode: props.nodeGraph[oldParentNode!].displayName,
+          parentNodeId: props.nodeGraph[parentNodeId!].displayName,
+          grandParentNodeId: props.nodeGraph[grandParentNodeId!].displayName,
+        });
 
         if (
           grandParentNodeId &&
           props.nodeGraph[parentNodeId!].parents.includes(grandParentNodeId)
         ) {
+          console.log("falling in here");
           setHistory([...historyList, parentNodeId]);
           setCurrentNodeId(parentNodeId);
         } else {
+          console.log("falling in default");
           // update history to be default path up to parent node
           const defaultPath = defaultPaths().get(parentNodeId!);
           setHistory([...(defaultPath ?? ["0"])]);
@@ -505,7 +515,14 @@ export function HypergraphNodeComponentKeyboardOnly(
   }
 
   const sortAdjacents = createMemo(() => {
-    const adjacentNodeIds = findSiblings(props.node.id);
+    let adjacentNodeIds = findSiblings(props.node.id);
+
+    // Special hack for user study - hide groupings to hide improbable relations
+    if (props.node.id === "1") {
+      adjacentNodeIds = adjacentNodeIds.filter((id) => {
+        return id !== "2";
+      });
+    }
 
     const adjacentNodes = Array.from(adjacentNodeIds)
       .map((nodeId) => props.nodeGraph[nodeId])

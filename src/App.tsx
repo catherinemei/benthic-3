@@ -1,12 +1,12 @@
 import type { Component } from "solid-js";
 import { TraversalOutputComponentKeyboardParentFocus } from "./priority-traversal-parent-focus";
 
-import { aspirinHypergraph } from "./input-aspirin";
+import { FranconeriHideHypergraph } from "./input-franconeri-hide";
 
 const App: Component = () => {
   return (
     <TraversalOutputComponentKeyboardParentFocus
-      nodeGraph={aspirinHypergraph}
+      nodeGraph={FranconeriHideHypergraph}
       showHypergraph={false}
     />
   );
