@@ -132,8 +132,13 @@ export function TraversalOutputComponentKeyboardParentFocus(
       const focusedElementId = focusedElement?.id;
       const historyList = history();
 
+      if (currentNodeId() === "2") {
+        // Hack for user study - do not let users go up on Name node
+        const parentSection = document.getElementById(`parents-group`);
+        parentSection?.focus();
+      }
       // Select current parent node in focus
-      if (focusedElementId === "parents-group") {
+      else if (focusedElementId === "parents-group") {
         console.log("trying to select current parent node in focus");
         if (historyList.length == 2) {
           // First level child going back to root node
@@ -485,7 +490,11 @@ export function TraversalOutputComponentKeyboardParentFocus(
       <HypergraphNodeComponentKeyboardOnly
         history={history()}
         parentFocusId={
-          history().length > 1 ? history()[history().length - 2] : "-1"
+          history().length > 1
+            ? currentNodeId() !== "2"
+              ? history()[history().length - 2]
+              : "-1"
+            : "-1"
         }
         node={currentNode()}
         nodeGraph={props.nodeGraph}
@@ -522,6 +531,10 @@ export function HypergraphNodeComponentKeyboardOnly(
       adjacentNodeIds = adjacentNodeIds.filter((id) => {
         return id !== "2";
       });
+    } else if (props.node.id === "2") {
+      adjacentNodeIds = adjacentNodeIds.filter((id) => {
+        return id !== "1";
+      });
     }
 
     const adjacentNodes = Array.from(adjacentNodeIds)
@@ -541,6 +554,11 @@ export function HypergraphNodeComponentKeyboardOnly(
 
   const nonFocusedParentIds = createMemo(() => {
     const parentIds = props.node.parents;
+
+    // Hack - don't show parents for Name node
+    if (props.node.id === "2") {
+      return [];
+    }
 
     // Root node - has no parents, so no non-focused parents
     if (props.history.length == 1) {

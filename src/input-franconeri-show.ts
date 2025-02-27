@@ -166,7 +166,7 @@ export const FranconeriShowHypergraph: Hypergraph = {
     descriptionTokens: {
       label: "Charlie 12",
       shortDescription: "56 inches.",
-      longDescription: "55 inches.",
+      longDescription: "56 inches.",
     },
     parents: ["5", "6"],
     children: [],
