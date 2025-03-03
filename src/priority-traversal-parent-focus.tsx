@@ -390,9 +390,9 @@ export function TraversalOutputComponentKeyboardParentFocus(
 
         event.preventDefault();
       } else if (focusedElementId.startsWith("context")) {
-        // Navigating around while on one of the nodes within parent-context list
+        // Navigating around while on one of the nodes within option-nodes list
         const contextElms = Array.from(
-          document.querySelectorAll(`#parent-context li`)
+          document.querySelectorAll(`#option-nodes li`)
         ) as HTMLElement[];
 
         const currentIndex = contextElms.indexOf(focusedElement);
