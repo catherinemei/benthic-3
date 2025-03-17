@@ -145,12 +145,12 @@ export function TraversalOutputComponentKeyboardParentFocus(
 
       if (currentNodeId() === "2") {
         // Hack for user study - do not let users go up on Name node
-        const parentSection = document.getElementById(`parents-group`);
+        const parentSection = document.getElementById(`parents-group-text`);
         handleTabIndexSwitch(focusedElement, parentSection);
         parentSection?.focus();
       }
       // Select current parent node in focus
-      else if (focusedElementId === "parents-group") {
+      else if (focusedElementId === "parents-group-text") {
         console.log("trying to select current parent node in focus");
         if (historyList.length == 2) {
           // First level child going back to root node
@@ -200,7 +200,7 @@ export function TraversalOutputComponentKeyboardParentFocus(
         } else {
           console.log("hitting this 2");
           // At root node - only 1 node in history and cannot select/go-up
-          const parentSection = document.getElementById(`parents-group`);
+          const parentSection = document.getElementById(`parents-group-text`);
           handleTabIndexSwitch(focusedElement, parentSection);
           parentSection?.focus();
         }
@@ -296,12 +296,12 @@ export function TraversalOutputComponentKeyboardParentFocus(
             }
           } else {
             // At root node - only 1 node in history and cannot select/go-up
-            const parentSection = document.getElementById(`parents-group`);
+            const parentSection = document.getElementById(`parents-group-text`);
             handleTabIndexSwitch(focusedElement, parentSection);
             parentSection?.focus();
           }
         } else {
-          const currentParentNode = document.getElementById(`parents-group`);
+          const currentParentNode = document.getElementById(`parents-group-text`);
           handleTabIndexSwitch(focusedElement, currentParentNode);
           currentParentNode?.focus();
         }
@@ -441,19 +441,19 @@ export function TraversalOutputComponentKeyboardParentFocus(
           (event.key === "ArrowLeft" || event.key === "ArrowUp") &&
           currentIndex <= 0
         ) {
-          const parentGroup = document.getElementById("parents-group");
+          const parentGroup = document.getElementById("parents-group-text");
           handleTabIndexSwitch(focusedElement, parentGroup);
           parentGroup?.focus();
         } else if (
           (event.key === "ArrowRight" || event.key === "ArrowDown") &&
           currentIndex >= contextElms.length - 1
         ) {
-          const parentGroup = document.getElementById("parents-group");
+          const parentGroup = document.getElementById("parents-group-text");
           handleTabIndexSwitch(focusedElement, parentGroup);
           parentGroup?.focus();
         }
         event.preventDefault();
-      } else if (focusedElementId === "parents-group") {
+      } else if (focusedElementId === "parents-group-text") {
         // Selecting another parent to focus on
         const contextElms = Array.from(
           document.querySelectorAll(`#option-nodes li`)
@@ -610,11 +610,10 @@ export function HypergraphNodeComponentKeyboardOnly(
     <div>
       <ul
         id="parents-group"
-        // role='group'
-        // tabindex="0"
+        role='tree'
       >
+        <li role='treeitem' id='parents-group-text'>
         <span
-          // aria-hidden={true}
           style={{ "font-weight": "bold" }}
           onClick={() =>
             props.onNodeClick(props.node.id, props.parentFocusId, true)
@@ -634,6 +633,7 @@ export function HypergraphNodeComponentKeyboardOnly(
                 nonFocusedParentIds().length
               } additional groups. Use arrow and enter keys to make selection.`}
         </span>
+        </li>
       </ul>
 
       <ul id="option-nodes" role='tree'>
